@@ -1,0 +1,61 @@
+---
+title: "plot"
+output: html_document
+---
+
+```{r}
+library(forestplot)
+
+###### Creat input database for plotlibrary(forestplot)
+
+workdir <- "/Users/yihengpan/Desktop/AOR/plot"
+datafile <- file.path(workdir,"*.csv")
+Enbrel <- read.csv(datafile, stringsAsFactors=FALSE)
+
+###### Creat input database for plot
+tabletext <- cbind(c("Control",Enbrel$name),
+                   c("Outcome",Enbrel$Compare),
+                   c("    HR(95% CI)",Enbrel$CI),
+                   c("P-value",Enbrel$p_val),
+                   c(" ", " ", " ", " ")
+                   )
+
+
+##### Name the figure
+png(file.path(workdir,"covid-sair-7.png"),width=5000, height=1500)
+#### plot using the input database
+forestplot(labeltext=tabletext,
+            align = c("l", "l", "l"),
+          
+           graph.pos=5, ### Number of columns on the right side of the forest plot
+           ### Input confidence intervals
+           mean=c(NA,Enbrel$AOR), 
+           lower=c(NA,Enbrel$down), upper=c(NA,Enbrel$up),
+           #xlog = TRUE,
+           xlab = "HR",
+           #title=expression(paste("Associations between Tumor Necrosis Factor-",alpha," Blocking Agents and Dementia (or Alzheimer's disease)",sep="")),
+           xticks = seq(0.0,25.0,5), ###range of x axis
+           lwd.xaxis = 18, ### width of x axis
+           #lwd.zero = 0,  ### width of zero line
+           #xlab="<--Use drug Better    Adjusted Odds Ratio    No drug Better-->", ##name of x axis
+           hrzl_lines=list("2" = gpar(lwd=8, col="black",columns=1:4)),
+           ######## font sizes
+           txt_gp=fpTxtGp(label=gpar(cex=8),
+                          ticks=gpar(cex=6),
+                          xlab=gpar(cex=6),
+                          title=gpar(cex=6)),
+           #gp = gpar(fill = "black", col="black"),
+           grid = structure(c(1.0), gp = gpar(col = "black", lty=3,lwd = 10)),
+           ###### plot color
+           col=fpColors(box="black",lines="black", zero = "white"),
+           ###### adjust the plot of confidence intervals
+           cex=2.5, lineheight = unit(12,'cm'), colgap=unit(6,"mm"),
+           lwd.ci=15, ci.vertices=TRUE,ci.vertices.height = 0.20,boxsize = 0.1)
+
+dev.off()
+
+
+
+```
+
+
