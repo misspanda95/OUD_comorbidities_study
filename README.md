@@ -1,3 +1,3 @@
 # OUD_comorbidities_study
 
-DCN construction will coming soon
+Feel free to contact yx273@case.edu if you have any question.
